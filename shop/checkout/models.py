@@ -8,3 +8,6 @@ class Checkout(models.Model):
 
     def __str__(self):
         return f"{self.user} - {dt.now().strftime("%Y/%m/%d %H:%M:%S")}"
+
+class CheckoutLine(models.Model):
+    checkout = models.ForeignKey(Checkout, related_name='lines', on_delete=models.CASCADE)
