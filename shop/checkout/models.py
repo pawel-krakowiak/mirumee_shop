@@ -13,7 +13,7 @@ class Checkout(models.Model):
 class CheckoutLine(models.Model):
     checkout = models.ForeignKey(Checkout, related_name='checkout', on_delete=models.CASCADE)
     variant = models.ForeignKey(ProductVariant, related_name='name', on_delete=models.CASCADE)
-    variant_price = models.Foreign(ProductVariant, related_name='price', on_delete=models.CASCADE)
+    variant_price = models.ForeignKey(ProductVariant, related_name='price', on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
 
     def __str__(self):
