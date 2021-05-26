@@ -27,8 +27,9 @@ class CheckoutCreate(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, input):
         cleaned_input = cls.clean_input(input)
-        breakpoint()
-        checkout = Checkout.objects.create(**cleaned_input)
+    
+        # checkout = Checkout.objects.create(**cleaned_input)
+        checkout = Checkout.objects.create(**input)
         
         return CheckoutCreate(checkout=checkout)
 
