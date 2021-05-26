@@ -9,7 +9,7 @@ class CheckoutQueries(graphene.ObjectType):
         CheckoutType, id=graphene.Argument(graphene.ID, description="ID of checkout.")
     )
     checkouts = graphene.List(CheckoutType)
-    checkout_line = graphene.FIeld(
+    checkout_line = graphene.Field(
         CheckoutLineType,
         id=graphene.Argument(graphene.ID, description="ID of checkout line.")
     )
