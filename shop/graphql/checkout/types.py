@@ -1,6 +1,6 @@
 import graphene
 from django.db.models import Sum
-from grapehene_django import DjangoObjectType
+from graphene_django import DjangoObjectType
 
 from ...checkout.models import Checkout, CheckoutLine
 
