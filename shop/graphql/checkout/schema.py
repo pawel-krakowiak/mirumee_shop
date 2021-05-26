@@ -2,7 +2,7 @@ import graphene
 
 from .types import CheckoutType, CheckoutLineType
 from ...checkout.models import Checkout, CheckoutLine
-from .mutation import CheckoutCreate, CheckoutLineCreate
+from .mutations import CheckoutCreate, CheckoutLineCreate
 
 class CheckoutQueries(graphene.ObjectType):
     checkout = graphene.Field(
