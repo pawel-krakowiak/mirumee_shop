@@ -3,10 +3,15 @@ import graphene
 from .types import CheckoutType, CheckoutLineType
 from ...checkout.models import Checkout, CheckoutLine
 
+class CheckoutLineCreateInput(graphene.InputObjectType):
+    quantity = graphene.Int()
+    variant_id = graphene.Int()
 
 class CheckoutCreateInput(graphene.InputObjectType):
     user_email = graphene.String(required=True)
-
+    user = graphene.String(required=False)
+    lines = graphene.List(CheckoutLineCreateInput, required=True)
+    # lines = graphene.List(graphene.String(), required=False)
 
 class CheckoutCreate(graphene.Mutation):
     checkout = graphene.Field(CheckoutType)
@@ -22,16 +27,14 @@ class CheckoutCreate(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, input):
         cleaned_input = cls.clean_input(input)
+        breakpoint()
         checkout = Checkout.objects.create(**cleaned_input)
         
         return CheckoutCreate(checkout=checkout)
 
 
-class CheckoutLineCreateInput(graphene.InputObjectType):
-    quantity = graphene.Int()
-
-
 class CheckoutLineCreate(graphene.Mutation):
+    
     checkout_line = graphene.Field(CheckoutLineType)
 
     class Arguments:

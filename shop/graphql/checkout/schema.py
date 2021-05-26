@@ -29,6 +29,6 @@ class CheckoutQueries(graphene.ObjectType):
 
 class CheckoutMutations(graphene.ObjectType):
     checkout_create = CheckoutCreate.Field()
-    checkout_variant_create = CheckoutLineCreate.Field()
+    checkout_line_create = CheckoutLineCreate.Field()
 
 
