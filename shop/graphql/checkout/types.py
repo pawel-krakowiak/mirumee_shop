@@ -12,12 +12,12 @@ class CheckoutType(DjangoObjectType):
         fields = '__all__'
 
     def resolve_total_price(self, _info):
-        checkout = self.lines.all().aggregate(total_variant_price=Sum('price'))
-        total_variant_price = product['total_variant_price']
-        if not total_variant_Price:
+        checkout = self.lines.all().aggregate(total_variant_price=Sum('variant__price'))
+        total_variant_price = checkout['total_variant_price']
+        if not total_variant_price:
             return self.price
 
-        return product['total_variant_price']
+        return checkout['total_variant_price']
 
 class CheckoutLineType(DjangoObjectType):
     class Meta:
