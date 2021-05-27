@@ -11,7 +11,7 @@ class CheckoutQueries(graphene.ObjectType):
     )
     checkouts = graphene.List(CheckoutType)
     checkout_line = graphene.Field(
-        CheckoutType,
+        CheckoutLineType,
         id=graphene.Argument(graphene.ID, description="ID of checkout line."),
     )
     checkout_lines = graphene.List(CheckoutLineType)
@@ -27,7 +27,6 @@ class CheckoutQueries(graphene.ObjectType):
 
     def resolve_checkout_lines(self, _info):
         return CheckoutLine.objects.all()
-
 
 class CheckoutMutations(graphene.ObjectType):
     checkout_create = CheckoutCreate.Field()
