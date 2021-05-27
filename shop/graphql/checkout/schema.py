@@ -6,13 +6,15 @@ from .mutations import CheckoutCreate, CheckoutLineCreate
 
 class CheckoutQueries(graphene.ObjectType):
     checkout = graphene.Field(
-        CheckoutType, id=graphene.Argument(graphene.ID, description="ID of checkout.")
+        CheckoutType,
+        id=graphene.Argument(graphene.ID, description="ID of checkout."),
     )
     checkouts = graphene.List(CheckoutType)
     checkout_line = graphene.Field(
-        CheckoutLineType,
-        id=graphene.Argument(graphene.ID, description="ID of checkout line.")
+        CheckoutType,
+        id=graphene.Argument(graphene.ID, description="ID of checkout line."),
     )
+    checkout_lines = graphene.List(CheckoutLineType)
 
     def resolve_checkout(self, _info, id):
         return Checkout.objects.filter(id=id).first()
@@ -23,7 +25,7 @@ class CheckoutQueries(graphene.ObjectType):
     def resolve_checkout_line(self, _info, id):
         return CheckoutLine.objects.filter(id=id).first()
 
-    def resolve_checkout_lines(self, _info, id):
+    def resolve_checkout_lines(self, _info):
         return CheckoutLine.objects.all()
 
 
