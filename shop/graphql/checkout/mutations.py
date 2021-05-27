@@ -3,9 +3,16 @@ import graphene
 from .types import CheckoutType, CheckoutLineType
 from ...checkout.models import Checkout, CheckoutLine
 
+class CheckoutLineCreateInput(graphene.InputObjectType):
+    quantity = graphene.Int(required=True)
+    variant_id = graphene.Int(required=True)
+    checkout_id = graphene.Int(required=False)
+
 
 class CheckoutCreateInput(graphene.InputObjectType):
-    user_email = graphene.String(required=True)
+    user_email = graphene.String(required=False)
+    user = graphene.String(required=False)
+    lines = graphene.List(CheckoutLineCreateInput, required=True)
 
 
 class CheckoutCreate(graphene.Mutation):
@@ -15,21 +22,15 @@ class CheckoutCreate(graphene.Mutation):
         input = CheckoutCreateInput(required=True)
 
     @classmethod
-    def clean_input(cls, input):
-        # TODO: Validate e-mail
-        return input
-
-    @classmethod
     def mutate(cls, root, info, input):
-        cleaned_input = cls.clean_input(input)
-        breakpoint()
-        checkout = Checkout.objects.create(**cleaned_input)
+        lines = input.pop('lines')
+        checkout = Checkout.objects.create(**input)
+        checkout_lines = []
+        for line in lines:
+            checkout_lines.append(CheckoutLine(checkout_id=checkout.id, **line))        
         
-        return CheckoutCreate(checkout=checkout)
-
-
-class CheckoutLineCreateInput(graphene.InputObjectType):
-    quantity = graphene.Int()
+        checkout.lines.bulk_create(checkout_lines)
+        return CheckoutCreate(checkout=checkout) 
 
 
 class CheckoutLineCreate(graphene.Mutation):
@@ -37,16 +38,25 @@ class CheckoutLineCreate(graphene.Mutation):
 
     class Arguments:
         input = CheckoutLineCreateInput(required=True)
-        checkout_id = graphene.ID(required=True)
 
     @classmethod
     def clean_input(cls, input):
-        # TODO: quantity can't be a negative number
         return input
 
     @classmethod
-    def mutate(cls, root, _info, input, checkout_id):
+    def mutate(cls, root, _info, input):
         cleaned_input = cls.clean_input(input)
-        checkout_line = CheckoutLine.objects.create(checkout_id=checkout_id, **cleaned_input)
 
-        return CheckoutLineCreate(checkout_line=checkout_line)
+        if 'checkout_id' in cleaned_input:
+            input_checkout = input.get('checkout_id')
+            input_variant = input.get('variant_id')
+            input_quantity = input.get('quantity')
+            checkout = Checkout.objects.get(id=input_checkout)
+
+            if checkout.lines.filter(variant_id=input_variant).count():
+                line = checkout.lines.get(variant_id=input_variant)
+                line.quantity += input_quantity
+                checkout.lines.filter(variant_id=input_variant).update(quantity=line.quantity)
+                return
+
+        checkout_line = CheckoutLine.objects.create(**cleaned_input)
