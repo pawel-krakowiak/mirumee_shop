@@ -17,7 +17,7 @@ class Checkout(models.Model):
             return f"Checkout: (Uknown Owner) ID: {self.id}"
 
 class CheckoutLine(models.Model):
-    checkout = models.ForeignKey(Checkout, related_name='lines', on_delete=models.CASCADE, null=True)
+    checkout = models.ForeignKey(Checkout, related_name='lines', on_delete=models.CASCADE)
     variant = models.ForeignKey(ProductVariant, related_name='+', on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
 
