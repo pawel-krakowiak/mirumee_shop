@@ -8,7 +8,7 @@ class ProductCreateInput(graphene.InputObjectType):
     name = graphene.String(required=True)
     price = graphene.Decimal(required=True)
     description = graphene.String(required=True)
-    quantity = graphene.Int()
+    quantity = graphene.Int(required=False)
 
 
 class ProductCreate(graphene.Mutation):
@@ -25,7 +25,6 @@ class ProductCreate(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, input):
         cleaned_input = cls.clean_input(input)
-
         product = Product.objects.create(**cleaned_input)
 
         return ProductCreate(product=product)
