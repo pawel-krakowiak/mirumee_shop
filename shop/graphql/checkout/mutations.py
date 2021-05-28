@@ -11,7 +11,7 @@ class CheckoutLineCreateInput(graphene.InputObjectType):
 
 class CheckoutCreateInput(graphene.InputObjectType):
     user_email = graphene.String(required=False)
-    user = graphene.String(required=False)
+    user = graphene.String(required=True)
     lines = graphene.List(CheckoutLineCreateInput, required=True)
 
 
