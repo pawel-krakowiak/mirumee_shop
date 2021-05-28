@@ -5,8 +5,8 @@ from ...checkout.models import Checkout, CheckoutLine
 
 class CheckoutLineCreateInput(graphene.InputObjectType):
     quantity = graphene.Int(required=True)
-    variant_id = graphene.Int(required=True)
-    checkout_id = graphene.Int(required=False)
+    variant_id = graphene.ID(required=True)
+    checkout_id = graphene.ID(required=False)
 
 
 class CheckoutCreateInput(graphene.InputObjectType):
