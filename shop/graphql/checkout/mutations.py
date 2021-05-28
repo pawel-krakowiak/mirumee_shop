@@ -46,17 +46,23 @@ class CheckoutLineCreate(graphene.Mutation):
     @classmethod
     def mutate(cls, root, _info, input):
         cleaned_input = cls.clean_input(input)
+        
+        checkout_id = input.get('checkout_id')
 
-        if 'checkout_id' in cleaned_input:
-            input_checkout = input.get('checkout_id')
-            input_variant = input.get('variant_id')
-            input_quantity = input.get('quantity')
+        if checkout_id:
+            variant_id = input.get('variant_id')
+            quantity = input.get('quantity')
             checkout = Checkout.objects.get(id=input_checkout)
 
-            if checkout.lines.filter(variant_id=input_variant).count():
-                line = checkout.lines.get(variant_id=input_variant)
-                line.quantity += input_quantity
-                checkout.lines.filter(variant_id=input_variant).update(quantity=line.quantity)
+            try:
+                line = checkout.lines.get(variant_id=variant_id)
+
+            except CheckoutLine.DoesNotExist:
+                checkout_line = CheckoutLine.objects.create(**cleaned_input)
+
+            else:
+                line.quantity += quantity
+                line.save(updated_fields=['quantity'])
                 return
 
         checkout_line = CheckoutLine.objects.create(**cleaned_input)
