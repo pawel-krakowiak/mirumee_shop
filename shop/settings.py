@@ -42,8 +42,11 @@ INSTALLED_APPS = [
 
     'shop.product',
     'shop.checkout',
+    'shop.account',
 
 ]
+
+AUTH_USER_MODEL = "account.User"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
