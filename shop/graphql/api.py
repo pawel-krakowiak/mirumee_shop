@@ -6,11 +6,15 @@ from .account.authenticate import AuthenticateMutations
 from .account.schema import UserQueries, UserMutations
 
 
-class Query(ProductQueries, CheckoutQueries):
+class Query(ProductQueries, CheckoutQueries, UserQueries):
     pass
 
 
-class Mutations(ProductMutations, CheckoutMutations, AuthenticateMutations):
+class Mutations(ProductMutations,
+                CheckoutMutations,
+                AuthenticateMutations,
+                UserMutations
+    ):
     pass
 
 
