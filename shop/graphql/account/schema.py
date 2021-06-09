@@ -8,19 +8,28 @@ class UserQueries(graphene.ObjectType):
     user = graphene.Field(
         UserType,
         id=graphene.Argument(graphene.ID, description="ID of user."),
-        mail=graphene.Argument(graphene.String, description="Mail of user.")
+        
     )
+
+    user_by_email = graphene.Field(
+        UserType,
+        email=graphene.Argument(graphene.String, description="E-mail of user.")
+    )
+
     users = graphene.List(UserType)
 
-    def resolve_user(self, info):
+    graphene.String(description="Mail of user.")
+
+    def resolve_user(self, info, id):
         user = User.objects.filter(id=id).first()
         return user
     
-    def resolve_users(self, info, token):
+    def resolve_users(self, info):
         users = User.objects.all()
+        return users
 
-    def resolve_users_by_mail(self, info):
-        user = User.objects.filter(mail=mail).first()
+    def resolve_user_by_email(self, info, email):
+        user = User.objects.filter(email=email).first()
         return user
 
 class UserMutations(graphene.ObjectType):
