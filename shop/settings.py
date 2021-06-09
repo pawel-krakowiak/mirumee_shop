@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-o!d56%lwos-k#3e=r9-yi_ugn7@ata&$q^^()-k__!k=5l-df(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -38,9 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'graphql_jwt.refresh_token.apps.RefreshTokenConfig',
-    # 'api',
-
     'graphene_django',
     
     'shop.product',
@@ -49,6 +47,9 @@ INSTALLED_APPS = [
 
     'shop.account',
 
+    'graphql_jwt.refresh_token.apps.RefreshTokenConfig',
+
+    'shop.utils'
     
 ]
 
@@ -147,13 +148,13 @@ GRAPHENE = {
 }
 
 GRAPHQL_JWT = {
-    'JWT_PAYLOAD_HANDLER': 'app.utils.jwt_payload',
+    'JWT_PAYLOAD_HANDLER': 'shop.utils.jwt_payload',
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
     'JWT_VERIFY_EXPIRATION': True,
     'JWT_LONG_RUNNING_REFRESH_TOKEN': True,
     'JWT_EXPIRATION_DELTA': timedelta(minutes=5),
     'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),    
-    'JWT_SECRET_KEY': os.environ['SECRET_KEY'],
+    'JWT_SECRET_KEY': SECRET_KEY,
     'JWT_ALGORITHM': 'HS256',
 }
 
