@@ -1,8 +1,9 @@
 import graphene
+import graphql_jwt
 
 from .product.schema import ProductQueries, ProductMutations
 from .checkout.schema import CheckoutMutations, CheckoutQueries
-from .account.authenticate import AuthenticateMutations
+# from .account.authenticate import AuthenticateMutations
 from .account.schema import UserQueries, UserMutations
 
 
@@ -12,10 +13,11 @@ class Query(ProductQueries, CheckoutQueries, UserQueries):
 
 class Mutations(ProductMutations,
                 CheckoutMutations,
-                AuthenticateMutations,
                 UserMutations
     ):
-    pass
+    token_auth = graphql_jwt.ObtainJSONWebToken.Field()
+    verify_token = graphql_jwt.Verify.Field()
+    refresh_token = graphql_jwt.Refresh.Field()
 
 
 schema = graphene.Schema(query=Query,mutation=Mutations)
