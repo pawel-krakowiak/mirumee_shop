@@ -1,20 +1,16 @@
 from django.db import models
-from django.conf import settings
-from datetime import datetime as dt
 
-from ..product.models import ProductVariant
 
 class Checkout(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    user_email = models.EmailField(max_length=100, null=True, blank=True)
-    
-    def __str__(self):
-        return f"User Checkout: {self.user}"
+    user_email = models.EmailField()
+    #lines
+
 
 class CheckoutLine(models.Model):
-    checkout = models.ForeignKey(Checkout, related_name='lines', on_delete=models.CASCADE)
-    variant = models.ForeignKey(ProductVariant, related_name='+', on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1)
-
-    def __str__(self):
-        return f"> Variant: {self.variant} Quantity: {self.quantity}"
+    checkout = models.ForeignKey(
+        Checkout, related_name="lines", on_delete=models.CASCADE
+    )
+    variant = models.ForeignKey(
+        "product.ProductVariant", on_delete=models.CASCADE
+    )
+    quantity = models.PositiveIntegerField()
