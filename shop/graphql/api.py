@@ -3,7 +3,6 @@ import graphql_jwt
 
 from .product.schema import ProductQueries, ProductMutations
 from .checkout.schema import CheckoutMutations, CheckoutQueries
-# from .account.authenticate import AuthenticateMutations
 from .account.schema import UserQueries, UserMutations
 
 

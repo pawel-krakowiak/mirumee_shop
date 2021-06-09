@@ -1,5 +1,6 @@
 import graphene
 import graphql_jwt
+from graphql_jwt.decorators import staff_member_required
 
 from ...account.models import User, UserManager
 from .mutations import UserCreate, StaffUserCreate
@@ -25,8 +26,8 @@ class UserQueries(graphene.ObjectType):
         user = User.objects.filter(id=id).first()
         return user
     
+    @staff_member_required
     def resolve_users(self, info):
-        # users = User.objects.all()
         user = info.context.user
         if user.is_anonymous:
             raise Exception('Auth Error: Your must be signed in')

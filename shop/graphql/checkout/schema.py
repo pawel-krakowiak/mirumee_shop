@@ -1,5 +1,8 @@
 import graphene
 
+import graphql_jwt
+from graphql_jwt.decorators import staff_member_required
+
 from ...checkout.models import Checkout, CheckoutLine
 from .mutations import CheckoutCreate
 from .types import CheckoutLineType, CheckoutType
@@ -21,6 +24,7 @@ class CheckoutQueries(graphene.ObjectType):
         checkout = Checkout.objects.filter(id=id).first()
         return checkout
 
+    @staff_member_required
     def resolve_checkouts(self, info):
         checkouts = Checkout.objects.all()
         return checkouts
