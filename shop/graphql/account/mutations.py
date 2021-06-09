@@ -1,8 +1,11 @@
 import graphene
+
 import graphql_jwt
-from graphql import GraphQLError
-from django.core.exceptions import ObjectDoesNotExist
+from graphql_jwt.decorators import staff_member_required, superuser_required
 from graphql_jwt.shortcuts import create_refresh_token, get_token
+from graphql import GraphQLError
+
+from django.core.exceptions import ObjectDoesNotExist
 
 from ...account.models import User, UserManager
 from .types import UserType
@@ -50,8 +53,8 @@ class UserCreate(graphene.Mutation):
         else:
             raise GraphQLError(f'{cls.__name__} Error: That email already exists!')
             return None
-        
-        
+
+
 class StaffUserCreate(graphene.Mutation):
     user = graphene.Field(UserType)
     token = graphene.String()

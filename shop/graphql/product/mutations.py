@@ -1,4 +1,5 @@
 import graphene
+from graphql_jwt.decorators import staff_member_required
 
 from .types import ProductType, ProductVariantType
 from ...product.models import Product, ProductVariant
@@ -9,6 +10,7 @@ class ProductCreateInput(graphene.InputObjectType):
     price = graphene.Decimal(required=True)
     description = graphene.String(required=True)
     quantity = graphene.Int()
+
 
 
 class ProductCreate(graphene.Mutation):
@@ -35,6 +37,7 @@ class ProductVariantCreateInput(graphene.InputObjectType):
     name = graphene.String(required=True)
     sku = graphene.String(required=True)
     price = graphene.Decimal(required=True)
+
 
 
 class ProductVariantCreate(graphene.Mutation):

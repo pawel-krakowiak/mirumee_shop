@@ -10,10 +10,7 @@ class Query(ProductQueries, CheckoutQueries, UserQueries):
     pass
 
 
-class Mutations(ProductMutations,
-                CheckoutMutations,
-                UserMutations
-    ):
+class Mutations(ProductMutations, CheckoutMutations, UserMutations):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()
