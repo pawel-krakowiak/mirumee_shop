@@ -1,4 +1,5 @@
 import graphene
+import re
 
 import graphql_jwt
 from graphql_jwt.decorators import staff_member_required, superuser_required
@@ -27,10 +28,36 @@ class UserCreate(graphene.Mutation):
     class Arguments:
         input = UserCreateInput(required=True)
 
-    def clean_input(input):
-        # TODO: Validate email
-        return input
+    @classmethod
+    def make_email(cls, email):
+        regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
+        if(re.search(regex, email)):
+            return email
+        else:
+            raise GraphQLError("Email is invalid.")
 
+    @classmethod
+    def make_name(cls, name):
+        regex = '/^[A-Za-z]+$/'
+        if(re.search(regex, name)):
+            return str(name).capitalize()
+        else:
+            raise GraphQLError(f"Name '{name}' is invalid, please enter correct name.")
+
+
+    @classmethod
+    def clean_input(cls, input):
+        email = input.get('email')
+        input['email'] = cls.make_email(email)
+
+        fname = input.get('first_name')
+        input['first_name'] = cls.make_name(fname)
+
+        lname = input.get('last_name')
+        input['last_name'] = cls.make_name(lname)
+        
+        return input
+    
     @classmethod
     def mutate(cls, root, info, input):
         cleaned_input = cls.clean_input(input)
@@ -52,7 +79,6 @@ class UserCreate(graphene.Mutation):
 
         else:
             raise GraphQLError(f'{cls.__name__} Error: That email already exists!')
-            return None
 
 
 class StaffUserCreate(graphene.Mutation):
@@ -84,5 +110,4 @@ class StaffUserCreate(graphene.Mutation):
 
         else:
             raise GraphQLError(f'{cls.__name__} Error: That email already exists!')
-            return None
 
