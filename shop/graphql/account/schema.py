@@ -1,7 +1,7 @@
 import graphene
 
 from ...account.models import User, UserManager
-from .mutation import UserCreate, StaffUserCreate
+from .mutations import UserCreate, StaffUserCreate
 from .types import UserType
 
 class UserQueries(graphene.ObjectType):
@@ -23,4 +23,7 @@ class UserQueries(graphene.ObjectType):
         user = User.objects.filter(mail=mail).first()
         return user
 
+class UserMutations(graphene.ObjectType):
+    user_create = UserCreate.Field()
+    staff_user_create = StaffUserCreate.Field()
     
