@@ -71,3 +71,4 @@ class StaffUserCreate(graphene.Mutation, UserCreate):
         else:
             raise GraphQLError('That email already exists!')
             return
+
