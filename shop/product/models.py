@@ -7,10 +7,9 @@ class Product(models.Model):
     description = models.CharField(null=False, blank=False, max_length=255)
     quantity = models.IntegerField(default=0)
 
-    def __str__(self):
+def __str__(self):
         return f"{self.name}"
-
-
+    
 class ProductVariant(models.Model):
     product = models.ForeignKey(Product, related_name='variants', on_delete=models.CASCADE)
     name = models.CharField(max_length=255, blank=False, null=False)
